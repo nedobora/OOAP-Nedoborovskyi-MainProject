@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<style>
+		.block{
+			width: 100px;
+			height: auto;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.block *{ margin: 2px; }
+
+		.red{ color: red }
+		.black { color: black; }
+
+		fieldset { 
+			width: 100px;
+			height: auto;
+		}
+
+	</style>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<fieldset>
+		<legend>Currency Converter</legend>
+		<div class="block">
+			<input id="input" type="number" onkeypress="def()">
+			<button id="UAH" class="red" onclick="converter('UAH', 28)">UAH</button>
+			<button id="RUB" class="black" onclick="converter('RUB', 71)">RUB</button>
+			<button id="EURO" class="black" onclick="converter('EURO', 0.89)">EURO</button>
+			<button id="USD" class="black" onclick="converter('USD', 1)">USD</button>
+			<input id="output" type="text" readonly>
+		</div>
+	</fieldset>
+</body>
+	<script>
+		var globalCurr = 'UAH';
+		var globalIndex = 28;
+
+		var input = "0";
+		var output = "0";
+
+		function converter(localCurr, localIndex) {
+			var getInput = parseFloat(document.getElementById("input").value);
+
+			if (getInput != input) {
+				input = getInput;
+				output = "0";
+			}
+
+			input = (input + parseFloat(output)) / globalIndex * localIndex;
+			var returnedValue = input;
+
+			var len1 = Math.floor(returnedValue).toString().length;
+			var len2 = (returnedValue % 1).toString().length;
+
+			input = Math.floor(returnedValue) - parseInt(Math.floor(returnedValue)
+												.toString()[len1-1]);
+
+			output = parseInt(Math.floor(returnedValue).toString()[len1-1]) + 
+					 (returnedValue % 1).toString().slice(1, len2-1);
+
+			document.getElementById("input").value = input;
+			document.getElementById("output").value = parseFloat(output).toFixed(2);
+
+			document.getElementById(globalCurr).style.color = "black";
+			document.getElementById(localCurr).style.color = "red";
+
+			globalCurr = localCurr;
+			globalIndex = localIndex;
+
+		}
+
+		function def() {
+			newInput = document.getElementById("input").value;
+			
+			if (input != newInput) {
+				document.getElementById("output").value = "0";
+			}
+		}
+	</script>
+</html>
